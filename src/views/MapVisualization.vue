@@ -252,7 +252,8 @@ let map = null
 let choroplethLayer = null
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api'
+const apiBaseUrl = import.meta.env.VITE_API_URL;
+const API_BASE_URL = apiBaseUrl
 
 // GeoJSON files mapping
 const geoJsonFiles = {

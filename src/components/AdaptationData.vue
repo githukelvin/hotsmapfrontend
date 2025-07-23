@@ -19,8 +19,8 @@
       <div class="adaptation-header">
         <h3>🛡️ Climate Adaptation Strategies - {{ countryName }}</h3>
       <div class="view-toggle">
-        <button 
-          v-for="view in views" 
+        <button
+          v-for="view in views"
           :key="view.key"
           @click="selectedView = view.key"
           :class="['view-btn', { active: selectedView === view.key }]"
@@ -41,9 +41,9 @@
               {{ practice.effectiveness }}% effective
             </span>
           </div>
-          
+
           <p class="practice-description">{{ practice.description }}</p>
-          
+
           <div class="practice-details">
             <div class="detail-item">
               <span class="detail-label">Implementation Cost:</span>
@@ -58,7 +58,7 @@
               <span class="detail-value">{{ practice.genderImpact }}</span>
             </div>
           </div>
-          
+
           <div class="practice-regions">
             <span class="regions-label">Successful in:</span>
             <div class="regions-tags">
@@ -77,7 +77,7 @@
         <h4>Technology Adoption & Impact</h4>
         <p>Climate-smart technologies and their effectiveness in reducing vulnerability</p>
       </div>
-      
+
       <div class="technology-grid">
         <div v-for="tech in technologies" :key="tech.id" class="tech-card">
           <div class="tech-header">
@@ -91,7 +91,7 @@
               <span class="rate-label">adoption</span>
             </div>
           </div>
-          
+
           <div class="tech-impact">
             <div class="impact-metrics">
               <div class="metric">
@@ -108,7 +108,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="tech-barriers" v-if="tech.barriers.length">
             <h6>Implementation Barriers:</h6>
             <ul class="barriers-list">
@@ -133,9 +133,9 @@
                   {{ intervention.status }}
                 </span>
               </div>
-              
+
               <p class="intervention-description">{{ intervention.description }}</p>
-              
+
               <div class="intervention-meta">
                 <div class="meta-item">
                   <span class="meta-icon">📅</span>
@@ -150,7 +150,7 @@
                   <span>{{ intervention.beneficiaries }} beneficiaries</span>
                 </div>
               </div>
-              
+
               <div class="intervention-progress" v-if="intervention.progress !== undefined">
                 <div class="progress-header">
                   <span>Progress</span>
@@ -176,7 +176,7 @@
             <p>Active Interventions</p>
           </div>
         </div>
-        
+
         <div class="summary-card">
           <div class="card-icon">👥</div>
           <div class="card-content">
@@ -184,7 +184,7 @@
             <p>People Reached</p>
           </div>
         </div>
-        
+
         <div class="summary-card">
           <div class="card-icon">📊</div>
           <div class="card-content">
@@ -215,7 +215,7 @@ const isLoading = ref(true)
 const error = ref<string | null>(null)
 const climateData = ref<any[]>([])
 
-const countryName = computed(() => 
+const countryName = computed(() =>
   props.country.charAt(0).toUpperCase() + props.country.slice(1)
 )
 
@@ -262,11 +262,11 @@ const interventions = ref<Array<{
 }>>([])
 
 // Computed properties
-const totalInterventions = computed(() => 
+const totalInterventions = computed(() =>
   interventions.value.filter(i => i.status === 'ongoing' || i.status === 'planned').length
 )
 
-const totalBeneficiaries = computed(() => 
+const totalBeneficiaries = computed(() =>
   interventions.value.reduce((sum, intervention) => sum + intervention.beneficiaries, 0)
 )
 
@@ -287,18 +287,18 @@ async function fetchAdaptationData() {
   try {
     isLoading.value = true
     error.value = null
+    const apiBaseUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${apiBaseUrl}/${props.country}/${props.sector}`)
 
-    const response = await fetch(`http://localhost:5000/api/${props.country}/${props.sector}`)
-    
     if (!response.ok) {
       throw new Error(`API call failed: ${response.statusText}`)
     }
 
     const result = await response.json()
-    
+
     if (result.success && result.data?.items) {
       climateData.value = result.data.items
-      
+
       // Generate adaptation data from API response
       generateBestPractices()
       generateTechnologies()
@@ -318,11 +318,11 @@ function generateBestPractices() {
   if (!climateData.value.length) return
 
   // Calculate average vulnerability for scaling
-  const avgVulnerability = climateData.value.reduce((sum, item) => 
+  const avgVulnerability = climateData.value.reduce((sum, item) =>
     sum + (item.Overall_Vulnerability_Score || 0), 0) / climateData.value.length
 
   // Get unique regions for successful regions list
-  const regions = [...new Set(climateData.value.map(item => 
+  const regions = [...new Set(climateData.value.map(item =>
     item.Region || item.District || item.Administrative_Unit || 'Unknown'
   ))].slice(0, 3)
 
@@ -355,7 +355,7 @@ function generateBestPractices() {
 
   bestPractices.value = practiceTemplates.map((template, index) => {
     // Adjust effectiveness based on vulnerability (lower vulnerability = higher effectiveness)
-    const effectiveness = Math.max(50, Math.min(95, 
+    const effectiveness = Math.max(50, Math.min(95,
       template.baseEffectiveness + (100 - avgVulnerability) / 5 + (Math.random() - 0.5) * 10
     ))
 
@@ -379,7 +379,7 @@ function generateBestPractices() {
 function generateTechnologies() {
   if (!climateData.value.length) return
 
-  const avgVulnerability = climateData.value.reduce((sum, item) => 
+  const avgVulnerability = climateData.value.reduce((sum, item) =>
     sum + (item.Overall_Vulnerability_Score || 0), 0) / climateData.value.length
 
   const techTemplates = [
@@ -411,7 +411,7 @@ function generateTechnologies() {
 
   technologies.value = techTemplates.map((template, index) => {
     // Lower vulnerability areas tend to have higher tech adoption
-    const adoptionRate = Math.max(10, Math.min(80, 
+    const adoptionRate = Math.max(10, Math.min(80,
       template.baseAdoption + (100 - avgVulnerability) / 3 + (Math.random() - 0.5) * 10
     ))
 
@@ -435,7 +435,7 @@ function generateTechnologies() {
 function generateInterventions() {
   if (!climateData.value.length) return
 
-  const avgVulnerability = climateData.value.reduce((sum, item) => 
+  const avgVulnerability = climateData.value.reduce((sum, item) =>
     sum + (item.Overall_Vulnerability_Score || 0), 0) / climateData.value.length
 
   const interventionTemplates = [
@@ -474,8 +474,8 @@ function generateInterventions() {
       endDate: ['2026', '2027', '2028', '2024'][index],
       budget: `$${(baseBudget * scaleFactor).toFixed(1)}M`,
       beneficiaries: Math.round(baseBeneficiaries * scaleFactor),
-      progress: template.status === 'completed' ? 100 : 
-               template.status === 'ongoing' ? Math.round(30 + Math.random() * 50) : 
+      progress: template.status === 'completed' ? 100 :
+               template.status === 'ongoing' ? Math.round(30 + Math.random() * 50) :
                undefined
     }
   })
@@ -1042,26 +1042,26 @@ onMounted(() => {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .view-toggle {
     flex-wrap: wrap;
   }
-  
+
   .practice-details {
     grid-template-columns: 1fr;
   }
-  
+
   .tech-header {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .intervention-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .intervention-meta {
     flex-direction: column;
     gap: 0.5rem;

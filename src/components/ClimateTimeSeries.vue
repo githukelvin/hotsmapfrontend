@@ -320,7 +320,8 @@ async function fetchClimateData() {
     error.value = null
 
     // Fetch climate time series data from API
-    const response = await fetch(`http://localhost:5000/api/${props.country}/${props.sector}`)
+    const apiBaseUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${apiBaseUrl}/${props.country}/${props.sector}`)
 
     if (!response.ok) {
       throw new Error(`API call failed: ${response.statusText}`)
@@ -333,7 +334,7 @@ async function fetchClimateData() {
 
       // Calculate metrics from the vulnerability data
       const validItems = climateData.value.filter(item => item.Overall_Vulnerability_Score != null)
-      const avgVulnerability = validItems.length > 0 
+      const avgVulnerability = validItems.length > 0
         ? validItems.reduce((sum, item) => sum + item.Overall_Vulnerability_Score, 0) / validItems.length
         : 50 // Default fallback value
 

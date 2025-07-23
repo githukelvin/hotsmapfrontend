@@ -55,7 +55,8 @@ export const useClimateStore = defineStore('climate', () => {
   })
 
   // API configuration
-  const API_BASE = 'http://localhost:5000/api'
+  const apiBaseUrl = import.meta.env.VITE_API_URL;
+  const API_BASE = apiBaseUrl
 
   // Computed values
   const availableSectors = computed(() => {

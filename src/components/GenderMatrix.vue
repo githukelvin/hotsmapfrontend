@@ -25,7 +25,7 @@
           <option value="crops">🌾 Crop Breakdown</option>
         </select>
       </div>
-      
+
       <div class="activity-filter" v-if="selectedView === 'crops'">
         <label>Activity:</label>
         <select v-model="selectedActivity" class="activity-select">
@@ -49,7 +49,7 @@
             <div class="grid-cell header">Men %</div>
             <div class="grid-cell header">Gap</div>
           </div>
-          
+
           <div v-for="activity in heatmapData" :key="activity.name" class="grid-row">
             <div class="grid-cell activity-name">{{ activity.name }}</div>
             <div class="grid-cell participation-cell" :style="{ backgroundColor: getHeatmapColor(activity.women) }">
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="heatmap-legend">
           <h5>Participation Level</h5>
           <div class="legend-scale">
@@ -109,7 +109,7 @@
             <h5>{{ crop.icon }} {{ crop.name }}</h5>
             <span class="crop-total">{{ crop.total }}% participation</span>
           </div>
-          
+
           <div class="crop-breakdown">
             <div class="gender-bar">
               <div class="women-bar" :style="{ width: crop.women + '%' }">
@@ -120,7 +120,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="crop-insights">
             <div class="insight-item">
               <span class="insight-label">Primary Role:</span>
@@ -148,7 +148,7 @@
             <p>Women lead in post-harvest processing ({{ getWomenLeadership() }}% participation)</p>
           </div>
         </div>
-        
+
         <div class="insight-card">
           <div class="insight-icon">⚖️</div>
           <div class="insight-content">
@@ -156,7 +156,7 @@
             <p>Largest gap in land ownership and decision-making roles</p>
           </div>
         </div>
-        
+
         <div class="insight-card">
           <div class="insight-icon">📈</div>
           <div class="insight-content">
@@ -203,70 +203,71 @@ async function fetchGenderData() {
   try {
     isLoading.value = true
     error.value = null
-    
+
     // Since there's no specific gender API, we'll use climate vulnerability data
     // and simulate gender participation based on that data
-    const response = await fetch(`http://localhost:5000/api/${props.country}/${props.sector}`)
-    
+    const apiBaseUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${apiBaseUrl}/${props.country}/${props.sector}`)
+
     if (!response.ok) {
       throw new Error(`API call failed: ${response.statusText}`)
     }
-    
+
     const result = await response.json()
-    
+
     if (result.success && result.data?.items) {
       // Transform climate data into gender participation insights
       const climateData = result.data.items
-      
+
       // Generate realistic gender data based on climate vulnerability patterns
       heatmapData.value = [
-        { 
-          name: 'Land Preparation', 
-          women: Math.round(30 + Math.random() * 20), 
-          men: Math.round(50 + Math.random() * 20), 
-          gap: 0 
+        {
+          name: 'Land Preparation',
+          women: Math.round(30 + Math.random() * 20),
+          men: Math.round(50 + Math.random() * 20),
+          gap: 0
         },
-        { 
-          name: 'Seed Selection', 
-          women: Math.round(60 + Math.random() * 20), 
-          men: Math.round(20 + Math.random() * 20), 
-          gap: 0 
+        {
+          name: 'Seed Selection',
+          women: Math.round(60 + Math.random() * 20),
+          men: Math.round(20 + Math.random() * 20),
+          gap: 0
         },
-        { 
-          name: 'Planting', 
-          women: Math.round(55 + Math.random() * 15), 
-          men: Math.round(35 + Math.random() * 15), 
-          gap: 0 
+        {
+          name: 'Planting',
+          women: Math.round(55 + Math.random() * 15),
+          men: Math.round(35 + Math.random() * 15),
+          gap: 0
         },
-        { 
-          name: 'Weeding', 
-          women: Math.round(70 + Math.random() * 15), 
-          men: Math.round(15 + Math.random() * 15), 
-          gap: 0 
+        {
+          name: 'Weeding',
+          women: Math.round(70 + Math.random() * 15),
+          men: Math.round(15 + Math.random() * 15),
+          gap: 0
         },
-        { 
-          name: 'Harvesting', 
-          women: Math.round(50 + Math.random() * 15), 
-          men: Math.round(40 + Math.random() * 15), 
-          gap: 0 
+        {
+          name: 'Harvesting',
+          women: Math.round(50 + Math.random() * 15),
+          men: Math.round(40 + Math.random() * 15),
+          gap: 0
         },
-        { 
-          name: 'Processing', 
-          women: Math.round(75 + Math.random() * 15), 
-          men: Math.round(10 + Math.random() * 15), 
-          gap: 0 
+        {
+          name: 'Processing',
+          women: Math.round(75 + Math.random() * 15),
+          men: Math.round(10 + Math.random() * 15),
+          gap: 0
         },
-        { 
-          name: 'Marketing', 
-          women: Math.round(40 + Math.random() * 20), 
-          men: Math.round(50 + Math.random() * 20), 
-          gap: 0 
+        {
+          name: 'Marketing',
+          women: Math.round(40 + Math.random() * 20),
+          men: Math.round(50 + Math.random() * 20),
+          gap: 0
         },
-        { 
-          name: 'Land Ownership', 
-          women: Math.round(20 + Math.random() * 15), 
-          men: Math.round(70 + Math.random() * 15), 
-          gap: 0 
+        {
+          name: 'Land Ownership',
+          women: Math.round(20 + Math.random() * 15),
+          men: Math.round(70 + Math.random() * 15),
+          gap: 0
         }
       ].map(item => ({
         ...item,
@@ -275,65 +276,65 @@ async function fetchGenderData() {
 
       // Generate crop data based on agricultural vulnerability
       cropData.value = [
-        { 
-          name: 'Cereals', 
-          icon: '🌾', 
-          women: Math.round(60 + Math.random() * 15), 
-          men: Math.round(25 + Math.random() * 15), 
-          total: 100, 
-          gap: 0, 
-          primaryRole: 'Processing & Storage' 
+        {
+          name: 'Cereals',
+          icon: '🌾',
+          women: Math.round(60 + Math.random() * 15),
+          men: Math.round(25 + Math.random() * 15),
+          total: 100,
+          gap: 0,
+          primaryRole: 'Processing & Storage'
         },
-        { 
-          name: 'Legumes', 
-          icon: '🫘', 
-          women: Math.round(70 + Math.random() * 15), 
-          men: Math.round(20 + Math.random() * 15), 
-          total: 100, 
-          gap: 0, 
-          primaryRole: 'Cultivation & Marketing' 
+        {
+          name: 'Legumes',
+          icon: '🫘',
+          women: Math.round(70 + Math.random() * 15),
+          men: Math.round(20 + Math.random() * 15),
+          total: 100,
+          gap: 0,
+          primaryRole: 'Cultivation & Marketing'
         },
-        { 
-          name: 'Root Crops', 
-          icon: '🥔', 
-          women: Math.round(75 + Math.random() * 15), 
-          men: Math.round(15 + Math.random() * 15), 
-          total: 100, 
-          gap: 0, 
-          primaryRole: 'All Activities' 
+        {
+          name: 'Root Crops',
+          icon: '🥔',
+          women: Math.round(75 + Math.random() * 15),
+          men: Math.round(15 + Math.random() * 15),
+          total: 100,
+          gap: 0,
+          primaryRole: 'All Activities'
         },
-        { 
-          name: 'Vegetables', 
-          icon: '🥬', 
-          women: Math.round(65 + Math.random() * 15), 
-          men: Math.round(25 + Math.random() * 15), 
-          total: 100, 
-          gap: 0, 
-          primaryRole: 'Home Gardens' 
+        {
+          name: 'Vegetables',
+          icon: '🥬',
+          women: Math.round(65 + Math.random() * 15),
+          men: Math.round(25 + Math.random() * 15),
+          total: 100,
+          gap: 0,
+          primaryRole: 'Home Gardens'
         },
-        { 
-          name: 'Fruits', 
-          icon: '🍎', 
-          women: Math.round(55 + Math.random() * 15), 
-          men: Math.round(35 + Math.random() * 15), 
-          total: 100, 
-          gap: 0, 
-          primaryRole: 'Processing' 
+        {
+          name: 'Fruits',
+          icon: '🍎',
+          women: Math.round(55 + Math.random() * 15),
+          men: Math.round(35 + Math.random() * 15),
+          total: 100,
+          gap: 0,
+          primaryRole: 'Processing'
         },
-        { 
-          name: 'Cash Crops', 
-          icon: '☕', 
-          women: Math.round(35 + Math.random() * 15), 
-          men: Math.round(55 + Math.random() * 15), 
-          total: 100, 
-          gap: 0, 
-          primaryRole: 'Labor Support' 
+        {
+          name: 'Cash Crops',
+          icon: '☕',
+          women: Math.round(35 + Math.random() * 15),
+          men: Math.round(55 + Math.random() * 15),
+          total: 100,
+          gap: 0,
+          primaryRole: 'Labor Support'
         }
       ].map(item => ({
         ...item,
         gap: item.women - item.men
       }))
-      
+
     } else {
       throw new Error('No data available for this country/sector combination')
     }
@@ -357,7 +358,7 @@ function getHeatmapColor(percentage: number): string {
 function getGapColor(gap: number): string {
   const absGap = Math.abs(gap)
   const intensity = Math.min(absGap / 50, 1)
-  
+
   if (gap > 0) {
     // Positive gap (women higher) - green tones
     return `rgba(34, 197, 94, ${0.2 + intensity * 0.6})`
@@ -454,7 +455,7 @@ watch([() => props.country, () => props.sector], () => {
 // Lifecycle
 onMounted(() => {
   fetchGenderData()
-  
+
   if (selectedView.value === 'comparison') {
     nextTick(() => {
       createComparisonChart()
@@ -830,15 +831,15 @@ onMounted(() => {
   .matrix-controls {
     flex-direction: column;
   }
-  
+
   .heatmap-container {
     flex-direction: column;
   }
-  
+
   .crops-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .insights-grid {
     grid-template-columns: 1fr;
   }
