@@ -11,6 +11,7 @@
 
     <!-- Header/Banner Section -->
     <header id="banner" class="relative min-h-screen flex flex-col">
+
       <!-- Navigation -->
       <nav id="header" class="relative z-10" :class="{ 'nav-solid': isScrolled }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -162,14 +163,102 @@
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
-            <a v-for="(item, index) in galleryItems"
-               :key="index"
-               :href="item.image"
-               class="col-3 fadeIn relative inline-block overflow-hidden group cursor-pointer"
-               style="animation-delay: 0.1s">
-              <img :src="item.image" :alt="item.title" class="w-full max-h-[300px] object-cover transition-opacity duration-200 group-hover:opacity-15"/>
-            </a>
+          <!-- Enhanced Slideshow Gallery -->
+          <div class="relative max-w-5xl mx-auto">
+            <!-- Main Slideshow Container -->
+            <div class="slideshow-container relative overflow-hidden rounded-2xl shadow-2xl bg-white"
+                 @mouseenter="stopAutoSlide"
+                 @mouseleave="startAutoSlide">
+              <!-- Slides -->
+              <div 
+                v-for="(item, index) in galleryItems"
+                :key="index"
+                :class="['slide', { 'active': currentSlide === index }]"
+                class="absolute inset-0 transition-all duration-700 ease-in-out"
+              >
+                <div class="grid md:grid-cols-2 h-full">
+                  <!-- Image Side -->
+                  <div class="relative overflow-hidden">
+                    <img 
+                      :src="item.image" 
+                      :alt="item.title" 
+                      class="w-full h-full object-cover transform transition-transform duration-700 hover:scale-105"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                  </div>
+                  
+                  <!-- Content Side -->
+                  <div class="p-8 md:p-12 flex flex-col justify-center bg-white">
+                    <div class="mb-4">
+                      <span class="inline-block px-3 py-1 bg-[#0494fc]/10 text-[#0494fc] text-sm font-semibold rounded-full">
+                        {{ item.category }}
+                      </span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                      {{ item.title }}
+                    </h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                      {{ item.description }}
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      </svg>
+                      {{ item.location }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Navigation Arrows -->
+              <button 
+                @click="previousSlide"
+                class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-10"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+              </button>
+              
+              <button 
+                @click="nextSlide"
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-10"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Slide Indicators -->
+            <div class="flex justify-center mt-8 space-x-3">
+              <button
+                v-for="(item, index) in galleryItems"
+                :key="index"
+                @click="goToSlide(index)"
+                :class="['slide-indicator', { 'active': currentSlide === index }]"
+                class="w-3 h-3 rounded-full transition-all duration-300"
+              ></button>
+            </div>
+
+            <!-- Thumbnail Navigation -->
+            <div class="mt-8 grid grid-cols-2 md:grid-cols-6 gap-4">
+              <button
+                v-for="(item, index) in galleryItems"
+                :key="index"
+                @click="goToSlide(index)"
+                :class="['thumbnail-btn', { 'active': currentSlide === index }]"
+                class="relative overflow-hidden rounded-lg aspect-square transition-all duration-300 hover:scale-105"
+              >
+                <img 
+                  :src="item.image" 
+                  :alt="item.title" 
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-300"></div>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -210,14 +299,51 @@ import { ref, onMounted, onUnmounted } from 'vue'
 const loading = ref(true)
 const mobileMenuOpen = ref(false)
 const isScrolled = ref(false)
+const currentSlide = ref(0)
 
 const galleryItems = ref([
-  { title: "Climate Data Visualization", image: "/images/gallery-images/IMAGE 1.jpg" },
-  { title: "Gender Analysis Dashboard", image: "/images/gallery-images/IMAGE 2.webp" },
-  { title: "Mapping Interface", image: "/images/gallery-images/IMAGE 3.jpg" },
-  { title: "Data Analysis", image: "/images/gallery-images/IMAGE 5.jpg" },
-  { title: "Research Tools", image: "/images/gallery-images/IMAGE 2.webp" },
-  { title: "Climate Mapping", image: "/images/gallery-images/IMAGE 1.jpg" }
+  { 
+    title: "Climate Data Visualization", 
+    image: "/images/gallery-images/IMAGE 1.jpg",
+    category: "Data Analysis",
+    description: "Advanced visualization tools helping policymakers understand climate vulnerability patterns across different regions and communities.",
+    location: "Ghana, Kenya, Uganda, Botswana"
+  },
+  { 
+    title: "Gender Analysis Dashboard", 
+    image: "/images/gallery-images/IMAGE 2.webp",
+    category: "Gender Research",
+    description: "Interactive dashboards revealing how climate change disproportionately affects women and marginalized communities in agricultural sectors.",
+    location: "Rural Communities"
+  },
+  { 
+    title: "Mapping Interface", 
+    image: "/images/gallery-images/IMAGE 3.jpg",
+    category: "Technology",
+    description: "User-friendly mapping interfaces that make complex climate data accessible to local governments and development organizations.",
+    location: "Sub-Saharan Africa"
+  },
+  { 
+    title: "Field Research & Data Collection", 
+    image: "/images/gallery-images/IMAGE 5.jpg",
+    category: "Research",
+    description: "On-ground data collection efforts working directly with communities to understand local climate impacts and adaptation needs.",
+    location: "East Africa"
+  },
+  { 
+    title: "Community Workshops", 
+    image: "/images/gallery-images/IMAGE 2.webp",
+    category: "Capacity Building",
+    description: "Training sessions with local communities and government officials on using climate vulnerability data for informed decision-making.",
+    location: "West Africa"
+  },
+  { 
+    title: "Policy Integration", 
+    image: "/images/gallery-images/IMAGE 1.jpg",
+    category: "Policy Impact",
+    description: "Supporting governments in integrating gender-responsive climate data into national adaptation and development policies.",
+    location: "National Level"
+  }
 ])
 
 const handleScroll = () => {
@@ -227,6 +353,33 @@ const handleScroll = () => {
 const scrollToSection = (sectionId: string) => {
   document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
   mobileMenuOpen.value = false
+}
+
+// Slideshow functions
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % galleryItems.value.length
+}
+
+const previousSlide = () => {
+  currentSlide.value = currentSlide.value === 0 ? galleryItems.value.length - 1 : currentSlide.value - 1
+}
+
+const goToSlide = (index: number) => {
+  currentSlide.value = index
+}
+
+// Auto-advance slideshow
+let slideInterval: number | null = null
+
+const startAutoSlide = () => {
+  slideInterval = setInterval(nextSlide, 5000)
+}
+
+const stopAutoSlide = () => {
+  if (slideInterval) {
+    clearInterval(slideInterval)
+    slideInterval = null
+  }
 }
 
 onMounted(() => {
@@ -239,6 +392,9 @@ onMounted(() => {
   // Add scroll listener
   window.addEventListener('scroll', handleScroll)
 
+  // Start slideshow auto-advance
+  startAutoSlide()
+
   // Hide preloader after a short delay
   setTimeout(() => {
     loading.value = false
@@ -247,11 +403,16 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  stopAutoSlide()
 })
 </script>
 
-<style scoped>
-/* Import your existing CSS files or include critical styles here */
+<style>
+/* Import original CSS files - using global scope since they contain global styles */
+@import '/css/style.css';
+@import '/css/color.css';
+@import '/css/font-awesome.min.css';
+@import '/css/animate.css';
 
 /* Critical styles from your original CSS */
 #banner {
@@ -417,6 +578,62 @@ onUnmounted(() => {
   left: 50%;
 }
 
+/* Gallery Slideshow Styles */
+.slideshow-container {
+  height: 500px;
+  position: relative;
+}
+
+.slide {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(100%);
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.slide-indicator {
+  background: rgba(4, 148, 252, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.slide-indicator.active {
+  background: #0494fc;
+  transform: scale(1.2);
+}
+
+.thumbnail-btn {
+  border: 3px solid transparent;
+  opacity: 0.7;
+}
+
+.thumbnail-btn.active {
+  border-color: #0494fc;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.thumbnail-btn:hover {
+  opacity: 1;
+}
+
+.thumbnail-btn .absolute {
+  transition: opacity 0.3s;
+}
+
+.thumbnail-btn:hover .absolute {
+  opacity: 0;
+}
+
+.thumbnail-btn.active .absolute {
+  opacity: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   #nav-trigger {
@@ -429,6 +646,18 @@ onUnmounted(() => {
 
   #nav-mobile {
     display: block;
+  }
+
+  .slideshow-container {
+    height: 600px;
+  }
+
+  .slide .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .slide .grid > div:first-child {
+    height: 250px;
   }
 }
 
@@ -449,6 +678,22 @@ onUnmounted(() => {
 
   #banner h1 {
     font-size: 48px !important;
+  }
+
+  .slideshow-container {
+    height: 550px;
+  }
+
+  .slide .p-8 {
+    padding: 1.5rem;
+  }
+
+  .slide .md\\:p-12 {
+    padding: 1.5rem;
+  }
+
+  .thumbnail-btn {
+    aspect-ratio: 1;
   }
 }
 </style>

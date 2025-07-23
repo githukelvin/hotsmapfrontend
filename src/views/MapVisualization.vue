@@ -1,5 +1,19 @@
 <template>
   <div class="climate-vulnerability-app">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <img src="/images/agnes.png" alt="AGNES" class="logo-img"/>
+        </div>
+        <div class="nav-links">
+          <router-link to="/" class="nav-link">Home</router-link>
+          <a href="/#about" class="nav-link">About</a>
+          <a href="/#gallery" class="nav-link">Gallery</a>
+          <router-link to="/maps" class="nav-link active">View Maps</router-link>
+        </div>
+      </div>
+    </nav>
     <!-- Header -->
     <div class="app-header">
       <h1>🌍 Climate Vulnerability Dashboard</h1>
@@ -1294,6 +1308,65 @@ onMounted(async () => {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 32px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover {
+  color: #0494fc;
+  background: rgba(4, 148, 252, 0.1);
+}
+
+.nav-link.active {
+  color: #0494fc;
+  background: rgba(4, 148, 252, 0.15);
+  font-weight: 600;
 }
 
 .app-header {
