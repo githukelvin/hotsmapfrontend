@@ -17,18 +17,19 @@
     <!-- Header -->
     <div class="app-header">
       <h1>🌍 Climate Vulnerability Dashboard</h1>
-      <div class="header-stats">
-        <span v-if="currentData.length" class="stat-badge success">
-          ✅ {{ currentData.length }} {{ getAdminUnit() }} loaded
-        </span>
-        <span v-if="dataStats.min !== dataStats.max" class="stat-badge info">
-          📊 {{ selectedDataField === 'vulnerability' ? 'Vulnerability' : formatFieldName(selectedDataField) }}:
-          Range {{ dataStats.min }}-{{ dataStats.max }} (scaled)
-        </span>
-        <span v-if="dataStats.avg" class="stat-badge primary">
-          📈 Average: {{ dataStats.avg }} (scaled)
-        </span>
-      </div>
+<!--      <div class="header-stats">-->
+<!--        <span v-if="currentData.length" class="stat-badge success">-->
+<!--          ✅ {{ currentData.length }} {{ getAdminUnit() }} loaded-->
+<!--        </span>-->
+<!--        <span v-if="dataStats.min !== dataStats.max" class="stat-badge info">-->
+<!--          📊 {{ selectedDataField === 'vulnerability' ? 'Vulnerability' : formatFieldName(selectedDataField) }}:-->
+<!--          Range {{ dataStats.min }}-{{ dataStats.max }} (scaled)-->
+<!--        </span>-->
+<!--        <span v-if="dataStats.avg" class="stat-badge primary">-->
+<!--          📈 Average: {{ dataStats.avg }} (scaled)-->
+<!--        </span>-->
+<!--      </div>-->
+<!--   -->
     </div>
 
     <!-- Controls -->
@@ -78,11 +79,11 @@
         <button @click="clearError" class="retry-btn">Clear</button>
         <button @click="loadData" class="retry-btn">Retry</button>
       </div>
-      <div v-else-if="currentData.length" class="status-success">
-        <span>✅ {{ currentData.length }} {{ getAdminUnit() }} with geographic boundaries</span>
-        <span>🗺️ Using real GeoJSON data</span>
-        <span v-if="availableDataFields.length">📊 {{ availableDataFields.length }} data fields available</span>
-      </div>
+<!--      <div v-else-if="currentData.length" class="status-success">-->
+<!--        <span>✅ {{ currentData.length }} {{ getAdminUnit() }} with geographic boundaries</span>-->
+<!--        <span>🗺️ Using real GeoJSON data</span>-->
+<!--        <span v-if="availableDataFields.length">📊 {{ availableDataFields.length }} data fields available</span>-->
+<!--      </div>-->
     </div>
 
     <!-- Main Map Container -->
@@ -155,18 +156,38 @@
     <div class="data-panel">
       <div class="data-header">
         <h3>📊 District Data ({{ filteredAndSortedData.length }} shown)</h3>
-        <div class="data-controls">
+        <!-- Data Controls -->
+        <div class="flex flex-col sm:flex-row gap-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
           <input
             v-model="searchTerm"
             placeholder="Search districts..."
-            class="search-input"
+            class="flex-1 px-4 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200 placeholder-gray-500"
           >
-          <select v-model="sortBy" class="sort-select">
-            <option value="name">Sort by Name</option>
-            <option value="vulnerability">Sort by Vulnerability</option>
-            <option value="selected">Sort by {{ formatFieldName(selectedDataField) }}</option>
+          <select
+            v-model="sortBy"
+            class="px-4 py-2 text-black ext-black border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200 bg-white cursor-pointer min-w-[200px] appearance-none"
+            style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3e%3c/svg%3e'); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em;"
+          >
+            <option class="text-black" value="name">Sort by Name</option>
+            <option class="text-black"  value="vulnerability">Sort by Vulnerability</option>
+            <option class="text-black"  value="selected">Sort by {{ formatFieldName(selectedDataField) }}</option>
           </select>
+
+          <!-- Info Button -->
+          <button
+            @click="openScaledScoreModal"
+            class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-md shadow-sm hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 flex items-center space-x-2 min-w-fit"
+            title="Learn how scaled scores are calculated"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="hidden sm:inline">Score Info</span>
+          </button>
         </div>
+
+
+
       </div>
 
       <div class="data-content">
@@ -238,6 +259,23 @@
         </div>
       </div>
     </div>
+
+
+    <!-- Modal Overlay -->
+    <Teleport to="body">
+      <div
+        v-if="showScaledScoreModal"
+        class="absolute  top-[80em]  left-[30em]   h-full z-500 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        @click.self="closeScaledScoreModal"
+      >
+        <div class="relative w-full max-w-6xl h-auto top-5em bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in-0 zoom-in-95 duration-300">
+          <InfoModalComponent
+            :isOpen="showScaledScoreModal"
+            @close="closeScaledScoreModal"
+          />
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -245,7 +283,7 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-
+import InfoModalComponent from '@/components/InfoModalComponent.vue' // Adjust path as needed
 // Reactive state
 const mapContainer = ref()
 const selectedCountry = ref('ghana')
@@ -261,6 +299,7 @@ const currentGeoJSON = ref(null)
 const currentDataCategory = ref(null)
 const infoPanelContent = ref('Hover over a district to see details')
 
+
 // Map state
 let map = null
 let choroplethLayer = null
@@ -275,6 +314,17 @@ const geoJsonFiles = {
   kenya: '/geojson/kenya_counties.geojson',
   botswana: '/geojson/botswana_districts.geojson',
   uganda: '/geojson/uganda_districts.geojson'
+}
+// Reactive data
+const showScaledScoreModal = ref(false)
+
+
+const openScaledScoreModal = () => {
+  showScaledScoreModal.value = true
+}
+
+const closeScaledScoreModal = () => {
+  showScaledScoreModal.value = false
 }
 
 // Property name mapping for GeoJSON

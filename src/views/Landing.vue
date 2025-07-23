@@ -84,8 +84,7 @@
       </div>
 
       <!-- Background Pattern -->
-      <div class="absolute inset-0 bg-black/20"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+      <!-- Removed dark overlays for cleaner header appearance -->
     </header>
 
     <!-- Main Content Area -->
@@ -152,8 +151,8 @@
 
       <!-- Gallery Section -->
       <section id="gallery" class="row text-center scrollto clearfix py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-16">
+        <div class="w-full flex flex-col items-center justify-center">
+          <div class="text-center mb-16 max-w-4xl mx-auto px-4">
             <h3 class="text-[#0494fc] font-semibold text-lg mb-2">Gallery</h3>
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Our Work in Action
@@ -164,13 +163,13 @@
           </div>
 
           <!-- Enhanced Slideshow Gallery -->
-          <div class="relative max-w-5xl mx-auto">
+          <div class="relative max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8">
             <!-- Main Slideshow Container -->
             <div class="slideshow-container relative overflow-hidden rounded-2xl shadow-2xl bg-white"
                  @mouseenter="stopAutoSlide"
                  @mouseleave="startAutoSlide">
               <!-- Slides -->
-              <div 
+              <div
                 v-for="(item, index) in galleryItems"
                 :key="index"
                 :class="['slide', { 'active': currentSlide === index }]"
@@ -179,14 +178,14 @@
                 <div class="grid md:grid-cols-2 h-full">
                   <!-- Image Side -->
                   <div class="relative overflow-hidden">
-                    <img 
-                      :src="item.image" 
-                      :alt="item.title" 
+                    <img
+                      :src="item.image"
+                      :alt="item.title"
                       class="w-full h-full object-cover transform transition-transform duration-700 hover:scale-105"
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                   </div>
-                  
+
                   <!-- Content Side -->
                   <div class="p-12 md:p-16 flex flex-col justify-center bg-white">
                     <div class="mb-6">
@@ -212,7 +211,7 @@
               </div>
 
               <!-- Navigation Arrows -->
-              <button 
+              <button
                 @click="previousSlide"
                 class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-10"
               >
@@ -220,8 +219,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
               </button>
-              
-              <button 
+
+              <button
                 @click="nextSlide"
                 class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-10"
               >
@@ -232,7 +231,7 @@
             </div>
 
             <!-- Slide Indicators -->
-            <div class="flex justify-center mt-8 space-x-3">
+            <div class="flex justify-center items-center mt-8 space-x-3">
               <button
                 v-for="(item, index) in galleryItems"
                 :key="index"
@@ -243,21 +242,23 @@
             </div>
 
             <!-- Thumbnail Navigation -->
-            <div class="mt-8 grid grid-cols-2 md:grid-cols-6 gap-4">
-              <button
-                v-for="(item, index) in galleryItems"
-                :key="index"
-                @click="goToSlide(index)"
-                :class="['thumbnail-btn', { 'active': currentSlide === index }]"
-                class="relative overflow-hidden rounded-lg aspect-square transition-all duration-300 hover:scale-105"
-              >
-                <img 
-                  :src="item.image" 
-                  :alt="item.title" 
-                  class="w-full h-full object-cover"
-                />
-                <div class="absolute inset-0 bg-black/20 transition-opacity duration-300"></div>
-              </button>
+            <div class="mt-8 flex justify-center">
+              <div class="grid grid-cols-2 md:grid-cols-6 gap-4 max-w-4xl w-full">
+                <button
+                  v-for="(item, index) in galleryItems"
+                  :key="index"
+                  @click="goToSlide(index)"
+                  :class="['thumbnail-btn', { 'active': currentSlide === index }]"
+                  class="relative overflow-hidden rounded-lg aspect-square transition-all duration-300 hover:scale-105"
+                >
+                  <img
+                    :src="item.image"
+                    :alt="item.title"
+                    class="w-full h-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-black/20 transition-opacity duration-300"></div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -290,6 +291,7 @@
         </ul>
       </div>
     </footer>
+
   </div>
 </template>
 
@@ -302,43 +304,43 @@ const isScrolled = ref(false)
 const currentSlide = ref(0)
 
 const galleryItems = ref([
-  { 
-    title: "Climate Data Visualization", 
+  {
+    title: "Climate Data Visualization",
     image: "/images/gallery-images/IMAGE 1.jpg",
     category: "Data Analysis",
     description: "Advanced visualization tools helping policymakers understand climate vulnerability patterns across different regions and communities.",
     location: "Ghana, Kenya, Uganda, Botswana"
   },
-  { 
-    title: "Gender Analysis Dashboard", 
+  {
+    title: "Gender Analysis Dashboard",
     image: "/images/gallery-images/IMAGE 2.webp",
     category: "Gender Research",
     description: "Interactive dashboards revealing how climate change disproportionately affects women and marginalized communities in agricultural sectors.",
     location: "Rural Communities"
   },
-  { 
-    title: "Mapping Interface", 
+  {
+    title: "Mapping Interface",
     image: "/images/gallery-images/IMAGE 3.jpg",
     category: "Technology",
     description: "User-friendly mapping interfaces that make complex climate data accessible to local governments and development organizations.",
     location: "Sub-Saharan Africa"
   },
-  { 
-    title: "Field Research & Data Collection", 
+  {
+    title: "Field Research & Data Collection",
     image: "/images/gallery-images/IMAGE 5.jpg",
     category: "Research",
     description: "On-ground data collection efforts working directly with communities to understand local climate impacts and adaptation needs.",
     location: "East Africa"
   },
-  { 
-    title: "Community Workshops", 
+  {
+    title: "Community Workshops",
     image: "/images/gallery-images/IMAGE 2.webp",
     category: "Capacity Building",
     description: "Training sessions with local communities and government officials on using climate vulnerability data for informed decision-making.",
     location: "West Africa"
   },
-  { 
-    title: "Policy Integration", 
+  {
+    title: "Policy Integration",
     image: "/images/gallery-images/IMAGE 1.jpg",
     category: "Policy Impact",
     description: "Supporting governments in integrating gender-responsive climate data into national adaptation and development policies.",
@@ -582,6 +584,14 @@ onUnmounted(() => {
 .slideshow-container {
   height: 500px;
   position: relative;
+  margin: 0 auto;
+}
+
+#gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .slide {
