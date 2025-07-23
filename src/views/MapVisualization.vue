@@ -1416,7 +1416,7 @@ onMounted(async () => {
 
 .controls-panel {
   background: rgba(255, 255, 255, 0.9);
-  padding: 1.5rem;
+  padding: 2rem;
   display: flex;
   gap: 2rem;
   align-items: center;
@@ -1439,7 +1439,7 @@ onMounted(async () => {
 }
 
 .control-group select {
-  padding: 0.75rem;
+  //padding: 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   background: white;

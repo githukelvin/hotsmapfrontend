@@ -979,9 +979,25 @@ blockquote {
 
 /* --------- 6.4 Gallery ---------- */
 
-#gallery img {
-    max-height: 300px;
-}
+/*#gallery img {*/
+/*    max-height: 300px;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #gallery [class*='col-'] {
     padding: 0;
@@ -2227,25 +2243,25 @@ blockquote {
     font-size: 14px;
     line-height: 1.4;
   }
-  
+
   .legend div {
     font-size: 12px;
     line-height: 20px;
     display: flex;
     align-items: center;
   }
-  
+
   .insight-panel {
     font-size: 14px;
     line-height: 1.6;
   }
-  
+
   .insight-panel h3 {
     margin: 0 0 10px 0;
     font-size: 16px;
     color: #1e40af;
   }
-  
+
   .reset-button:hover {
     background: #1e40af;
   }
@@ -2296,11 +2312,11 @@ blockquote {
         flex-direction: column;
         height: auto; /* Allow height to adjust on mobile */
     }
-    
+
     .map-area {
         min-height: 1700px; /* Slightly smaller on mobile */
     }
-    
+
     .map-text-panel {
         height: auto;
         max-height: 700px; /* Limit height on mobile */
@@ -2357,7 +2373,7 @@ blockquote {
     .map-flex-container {
         flex-direction: column;
     }
-    
+
     .map-text-panel {
         max-width: none;
     }

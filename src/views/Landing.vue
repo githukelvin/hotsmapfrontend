@@ -188,16 +188,16 @@
                   </div>
                   
                   <!-- Content Side -->
-                  <div class="p-8 md:p-12 flex flex-col justify-center bg-white">
-                    <div class="mb-4">
-                      <span class="inline-block px-3 py-1 bg-[#0494fc]/10 text-[#0494fc] text-sm font-semibold rounded-full">
+                  <div class="p-12 md:p-16 flex flex-col justify-center bg-white">
+                    <div class="mb-6">
+                      <span class="inline-block px-4 py-2 bg-[#0494fc]/10 text-[#0494fc] text-sm font-semibold rounded-full">
                         {{ item.category }}
                       </span>
                     </div>
-                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
                       {{ item.title }}
                     </h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">
+                    <p class="text-gray-600 mb-8 leading-relaxed text-lg">
                       {{ item.description }}
                     </p>
                     <div class="flex items-center text-sm text-gray-500">
@@ -596,6 +596,17 @@ onUnmounted(() => {
   transform: translateX(0);
 }
 
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.slide .grid > div:first-child {
+  height: 100%;
+}
+
 .slide-indicator {
   background: rgba(4, 148, 252, 0.3);
   border: none;
@@ -634,6 +645,13 @@ onUnmounted(() => {
   opacity: 0;
 }
 
+.thumbnail-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   #nav-trigger {
@@ -658,6 +676,14 @@ onUnmounted(() => {
 
   .slide .grid > div:first-child {
     height: 250px;
+  }
+
+  .slide .p-12 {
+    padding: 2.5rem !important;
+  }
+
+  .slide .md\\:p-16 {
+    padding: 2.5rem !important;
   }
 }
 
@@ -684,12 +710,12 @@ onUnmounted(() => {
     height: 550px;
   }
 
-  .slide .p-8 {
-    padding: 1.5rem;
+  .slide .p-12 {
+    padding: 2rem !important;
   }
 
-  .slide .md\\:p-12 {
-    padding: 1.5rem;
+  .slide .md\\:p-16 {
+    padding: 2rem !important;
   }
 
   .thumbnail-btn {

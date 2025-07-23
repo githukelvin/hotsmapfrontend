@@ -1397,9 +1397,9 @@ blockquote {
 
 /* --------- 6.4 Gallery ---------- */
 
-#gallery img {
-    max-height: 300px;
-}
+/*#gallery img {*/
+/*    max-height: 300px;*/
+/*}*/
 
 #gallery [class*='col-'] {
     padding: 0;
