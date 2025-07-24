@@ -223,7 +223,7 @@
               </div>
 
               <!-- Rich Data Display -->
-              <div class="rich-data">
+              <div class="rich-data"  v-show="item.data?.Poverty_Level || item.data?.Percent_Agriculture || item.data?.Per_GDP_AG || item.data?.Per_Women_Employed || item.data?.Per_Foretst_Savana">
                 <div v-if="item.data?.Poverty_Level" class="data-item">
                   <span class="data-label">Poverty:</span>
                   <span class="data-value">{{ item.data.Poverty_Level }}%</span>
