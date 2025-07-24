@@ -265,10 +265,10 @@
     <Teleport to="body">
       <div
         v-if="showScaledScoreModal"
-        class="absolute  top-[80em]  left-[30em]   h-full z-500 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        class="absolute  inset-0  h-full z-99999 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
         @click.self="closeScaledScoreModal"
       >
-        <div class="relative w-full max-w-6xl h-auto top-5em bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in-0 zoom-in-95 duration-300">
+        <div class="relative  h-auto top-5em bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in-0 zoom-in-95 duration-300">
           <InfoModalComponent
             :isOpen="showScaledScoreModal"
             @close="closeScaledScoreModal"
