@@ -317,14 +317,27 @@ const geoJsonFiles = {
 }
 // Reactive data
 const showScaledScoreModal = ref(false)
-
+const setBodyOverflow = (hidden: boolean) => {
+  if (hidden) {
+    // Store original overflow and set to hidden
+    originalOverflow.value = document.body.style.overflow || ''
+    document.body.style.overflow = 'hidden'
+  } else {
+    // Restore original overflow
+    document.body.style.overflow = originalOverflow.value
+  }
+}
 
 const openScaledScoreModal = () => {
   showScaledScoreModal.value = true
+  // setBodyOverflow(showScaledScoreModal.value)
+
 }
 
 const closeScaledScoreModal = () => {
   showScaledScoreModal.value = false
+  // setBodyOverflow(showScaledScoreModal.value)
+
 }
 
 // Property name mapping for GeoJSON

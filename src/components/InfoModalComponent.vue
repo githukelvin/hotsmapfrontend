@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, watch, ref } from 'vue'
 
 // Props
 const props = defineProps({
@@ -92,12 +92,34 @@ const props = defineProps({
 // Emits
 const emit = defineEmits(['close'])
 
+// Store original overflow value
+const originalOverflow = ref('')
+
 // Methods
 const closeModal = () => {
   emit('close')
+  setBodyOverflow(false)
 }
 
-// Lifecycle - Setup escape key handler
+const setBodyOverflow = (hidden: boolean) => {
+  if (hidden) {
+    // Scroll to top before setting overflow hidden
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Store original overflow and set to hidden
+    originalOverflow.value = document.body.style.overflow || ''
+    document.body.style.overflow = 'hidden'
+  } else {
+    // Restore original overflow
+    document.body.style.overflow = 'auto'
+  }
+}
+
+// Watch for isOpen changes
+watch(() => props.isOpen, (newValue) => {
+  setBodyOverflow(newValue)
+}, { immediate: true })
+
+// Lifecycle - Setup escape key handler and body overflow
 onMounted(() => {
   const handleEscape = (e) => {
     if (e.key === 'Escape' && props.isOpen) {
@@ -107,9 +129,16 @@ onMounted(() => {
 
   document.addEventListener('keydown', handleEscape)
 
+  // Set body overflow if modal is open on mount
+  if (props.isOpen) {
+    setBodyOverflow(true)
+  }
+
   // Cleanup on unmount
   onBeforeUnmount(() => {
     document.removeEventListener('keydown', handleEscape)
+    // Always restore body overflow on unmount
+    setBodyOverflow(false)
   })
 })
 </script>
