@@ -11,65 +11,76 @@
 
     <!-- Header/Banner Section -->
     <header id="banner" class="relative min-h-screen flex flex-col">
+      <TheHeader/>
 
-      <!-- Navigation -->
-      <nav id="header" class="relative z-10" :class="{ 'nav-solid': isScrolled }">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="row clearfix">
-            <div class="col-1">
-              <!-- Logo -->
-              <div id="logo" class="float-left h-[71px] leading-[66px] mr-4">
-                <img src="/images/agnes.png" id="banner-logo" alt="AGNES" class="max-h-[22px] align-middle mr-4"/>
-                <img src="/images/agnes.png" id="navigation-logo" alt="AGNES" class="max-h-[22px] align-middle mr-4 hidden"/>
-              </div>
+<!--      &lt;!&ndash; Navigation &ndash;&gt;-->
+<!--      <nav id="header" class="relative z-20" :class="{ 'nav-solid': isScrolled }">-->
+<!--        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">-->
+<!--          <div class="row clearfix">-->
+<!--            <div class="col-1">-->
+<!--              &lt;!&ndash; Logo &ndash;&gt;-->
+<!--              <div id="logo" class="float-left h-[71px] leading-[66px] mr-4">-->
+<!--                <img src="/images/agnes.png" id="banner-logo" alt="AGNES" class="max-h-[22px] align-middle mr-4"/>-->
+<!--                <img src="/images/agnes.png" id="navigation-logo" alt="AGNES" class="max-h-[22px] align-middle mr-4 hidden"/>-->
+<!--              </div>-->
 
-              <!-- Main Navigation -->
-              <nav id="nav-main" class="hidden md:block">
-                <ul class="text-center uppercase text-[13px]">
-                  <li class="inline-block list-none m-0">
-                    <a href="#banner" @click="scrollToSection('banner')" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">Home</a>
-                  </li>
-                  <li class="inline-block list-none m-0">
-                    <a href="#about" @click="scrollToSection('about')" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">About</a>
-                  </li>
-                  <li class="inline-block list-none m-0">
-                    <a href="#gallery" @click="scrollToSection('gallery')" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">Gallery</a>
-                  </li>
-                  <li class="inline-block list-none m-0">
-                    <router-link to="/maps" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">View Maps</router-link>
-                  </li>
-                </ul>
-              </nav>
+<!--              &lt;!&ndash; Main Navigation &ndash;&gt;-->
+<!--              <nav id="nav-main" class="hidden md:block">-->
+<!--                <ul class="text-center uppercase text-[13px]">-->
+<!--                  <li class="inline-block list-none m-0">-->
+<!--                    <a href="#banner" @click="scrollToSection('banner')" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">Home</a>-->
+<!--                  </li>-->
+<!--                  <li class="inline-block list-none m-0">-->
+<!--                    <a href="#about" @click="scrollToSection('about')" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">About</a>-->
+<!--                  </li>-->
+<!--                  <li class="inline-block list-none m-0">-->
+<!--                    <a href="#gallery" @click="scrollToSection('gallery')" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">Gallery</a>-->
+<!--                  </li>-->
+<!--                  <li class="inline-block list-none m-0">-->
+<!--                    <router-link to="/maps" class="block h-[71px] leading-[71px] px-[10px] hover:opacity-60 transition-opacity">View Maps</router-link>-->
+<!--                  </li>-->
+<!--                </ul>-->
+<!--              </nav>-->
 
-              <!-- Mobile Navigation Trigger -->
-              <div id="nav-trigger" class="md:hidden text-right">
-                <span @click="mobileMenuOpen = !mobileMenuOpen"
-                      :class="{ 'open': mobileMenuOpen }"
-                      class="inline-block w-[38px] h-[71px] text-[#111] cursor-pointer uppercase text-[22px] text-center rounded-t-[5px] transition-all duration-300 hover:opacity-60">
-                </span>
-              </div>
+<!--              &lt;!&ndash; Mobile Navigation Trigger - FIXED &ndash;&gt;-->
+<!--              <div id="nav-trigger" class="md:hidden text-right">-->
+<!--                <button-->
+<!--                  @click="toggleMobileMenu"-->
+<!--                  :class="{ 'open': mobileMenuOpen }"-->
+<!--                  class="inline-flex items-center justify-center w-[38px] h-[71px] text-[#111] cursor-pointer transition-all duration-300 hover:opacity-60 focus:outline-none"-->
+<!--                >-->
+<!--                  &lt;!&ndash; Hamburger Icon &ndash;&gt;-->
+<!--                  <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>-->
+<!--                  </svg>-->
+<!--                  &lt;!&ndash; Close Icon &ndash;&gt;-->
+<!--                  <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>-->
+<!--                  </svg>-->
+<!--                </button>-->
+<!--              </div>-->
 
-              <!-- Mobile Navigation -->
-              <nav id="nav-mobile" class="relative md:hidden" :class="{ 'block': mobileMenuOpen, 'hidden': !mobileMenuOpen }">
-                <ul v-show="mobileMenuOpen" class="list-none absolute left-0 right-0 -ml-5 -mr-5 pt-[10px] pb-[10px] text-center bg-white shadow-lg">
-                  <li class="mx-5 float-none text-left border-b border-[#e1e1e1] last:border-b-0">
-                    <a href="#banner" @click="scrollToSection('banner')" class="block py-3 text-[#333] w-full h-auto leading-normal border-b-0 transition-all duration-300 hover:bg-[#fafafa]">Home</a>
-                  </li>
-                  <li class="mx-5 float-none text-left border-b border-[#e1e1e1] last:border-b-0">
-                    <a href="#about" @click="scrollToSection('about')" class="block py-3 text-[#333] w-full h-auto leading-normal border-b-0 transition-all duration-300 hover:bg-[#fafafa]">About</a>
-                  </li>
-                  <li class="mx-5 float-none text-left border-b border-[#e1e1e1] last:border-b-0">
-                    <a href="#gallery" @click="scrollToSection('gallery')" class="block py-3 text-[#333] w-full h-auto leading-normal border-b-0 transition-all duration-300 hover:bg-[#fafafa]">Gallery</a>
-                  </li>
-                  <li class="mx-5 float-none text-left border-b border-[#e1e1e1] last:border-b-0">
-                    <router-link to="/maps" class="block py-3 text-[#333] w-full h-auto leading-normal border-b-0 transition-all duration-300 hover:bg-[#fafafa]">View Maps</router-link>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </nav>
+<!--              &lt;!&ndash; Mobile Navigation - FIXED &ndash;&gt;-->
+<!--              <nav id="nav-mobile" class="md:hidden absolute top-full left-0 right-0 z-10" :class="{ 'block': mobileMenuOpen, 'hidden': !mobileMenuOpen }">-->
+<!--                <ul v-show="mobileMenuOpen" class="list-none bg-white shadow-lg border-t border-gray-200 py-2">-->
+<!--                  <li class="border-b border-gray-100 last:border-b-0">-->
+<!--                    <a href="#banner" @click="scrollToSection('banner')" class="block py-4 px-6 text-[#333] hover:bg-gray-50 transition-colors">Home</a>-->
+<!--                  </li>-->
+<!--                  <li class="border-b border-gray-100 last:border-b-0">-->
+<!--                    <a href="#about" @click="scrollToSection('about')" class="block py-4 px-6 text-[#333] hover:bg-gray-50 transition-colors">About</a>-->
+<!--                  </li>-->
+<!--                  <li class="border-b border-gray-100 last:border-b-0">-->
+<!--                    <a href="#gallery" @click="scrollToSection('gallery')" class="block py-4 px-6 text-[#333] hover:bg-gray-50 transition-colors">Gallery</a>-->
+<!--                  </li>-->
+<!--                  <li class="border-b border-gray-100 last:border-b-0">-->
+<!--                    <router-link to="/maps" class="block py-4 px-6 text-[#333] hover:bg-gray-50 transition-colors">View Maps</router-link>-->
+<!--                  </li>-->
+<!--                </ul>-->
+<!--              </nav>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </nav>-->
 
       <!-- Banner Content -->
       <div id="banner-content" class="row flex-1 flex items-center pt-[170px] pb-[100px]">
@@ -297,6 +308,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import TheHeader from "@/components/TheHeader.vue";
 
 const loading = ref(true)
 const mobileMenuOpen = ref(false)
@@ -354,7 +366,12 @@ const handleScroll = () => {
 
 const scrollToSection = (sectionId: string) => {
   document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-  mobileMenuOpen.value = false
+  mobileMenuOpen.value = false // Close mobile menu when navigating
+}
+
+// FIXED: Separate toggle function
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value
 }
 
 // Slideshow functions
@@ -450,21 +467,24 @@ onUnmounted(() => {
   border-color: #0494fc;
 }
 
-/* Mobile nav trigger styling */
-#nav-trigger span:after {
-  font-family: "FontAwesome";
-  display: inline-block;
-  width: 38px;
-  height: 71px;
-  line-height: 75px;
-  text-align: center;
-  content: "\f0c9";
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+/* FIXED: Mobile Navigation Styling */
+#nav-mobile {
+  z-index: 15;
 }
 
-#nav-trigger span.open:after {
-  content: "\f00d";
+#nav-mobile ul {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Section heading styling */

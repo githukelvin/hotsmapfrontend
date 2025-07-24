@@ -1,19 +1,6 @@
 <template>
   <div class="climate-vulnerability-app">
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-logo">
-          <img src="/images/agnes.png" alt="AGNES" class="logo-img"/>
-        </div>
-        <div class="nav-links">
-          <router-link to="/" class="nav-link">Home</router-link>
-          <a href="/#about" class="nav-link">About</a>
-          <a href="/#gallery" class="nav-link">Gallery</a>
-          <router-link to="/maps" class="nav-link active">View Maps</router-link>
-        </div>
-      </div>
-    </nav>
+    <TheHeader/>
     <!-- Header -->
     <div class="app-header">
       <h1>🌍 Climate Vulnerability Dashboard</h1>
@@ -283,7 +270,8 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import InfoModalComponent from '@/components/InfoModalComponent.vue' // Adjust path as needed
+import InfoModalComponent from '@/components/InfoModalComponent.vue'
+import TheHeader from "@/components/TheHeader.vue"; // Adjust path as needed
 // Reactive state
 const mapContainer = ref()
 const selectedCountry = ref('ghana')
